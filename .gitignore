@@ -1,0 +1,13 @@
+*.csv
+*.oemof
+*.png
+*.pdf
+
+00_raw/
+01_preprocessed/
+04_plots/
+
+__pycache__
+.idea
+*.xlsx
+*/venv/*
