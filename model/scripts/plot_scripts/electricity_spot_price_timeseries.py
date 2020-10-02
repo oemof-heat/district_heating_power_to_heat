@@ -24,7 +24,7 @@ def plot():
         price_el,
         legend=False,
         plot_original=True,
-        title='Electricity prices (buying)',
+        title='Electricity spot price',
         ylabel='Hourly price [Eur/MWh]',
     )
 
