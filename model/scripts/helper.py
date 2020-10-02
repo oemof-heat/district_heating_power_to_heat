@@ -38,8 +38,9 @@ def get_experiment_dirs(name=None):
 
 
 def get_scenario_assumptions():
-    abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    scenario_path = os.path.join(abspath, 'scenarios.csv')
+
+    scenario_path = os.path.join(get_experiment_dirs()['raw'], 'scenarios.csv')
+
     scenario_assumptions = pd.read_csv(scenario_path, index_col=0, delimiter=';')
 
     return scenario_assumptions
