@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from helper import get_config_file
 from plotting import map_handles_labels, map_names_to_labels
@@ -50,6 +51,69 @@ def plot_stacked_bar(df_in, scenario_order, title=None, ylabel=None, ax=None, le
 
     if legend:
         draw_legend(ax, df)
+
+
+def plot_load_duration(timeseries, legend=True, plot_original=False, title=None, ylabel=None, **kwargs):
+    fig, ax = plt.subplots(figsize=(5, 5))
+
+    if plot_original:
+        timeseries.plot.line(ax=ax, color=c_list(timeseries, COLOR_DICT), use_index=False, **kwargs)
+
+    # sort timeseries
+    if isinstance(timeseries, pd.DataFrame):
+        sorted_ts = pd.DataFrame()
+        for column in timeseries.columns:
+            sorted_ts[column] = sorted(timeseries[column], reverse=True)
+
+    elif isinstance(timeseries, pd.Series):
+        sorted_ts = pd.DataFrame({timeseries.name: sorted(timeseries, reverse=True)})
+
+    # keep only nonzero
+    sorted_ts = sorted_ts.loc[:, (sorted_ts != 0).any(axis=0)]
+
+    colors = c_list(sorted_ts, COLOR_DICT)
+    if plot_original:
+        colors = darken_color(colors)
+
+    sorted_ts.plot.line(ax=ax, color=colors, **kwargs)
+
+    ax.set_ylabel(ylabel)
+    ax.set_title(title)
+
+    if legend:
+        handles, labels = map_handles_labels()
+        ax.legend(
+            handles=handles,
+            labels=labels,
+            loc='center left',
+            bbox_to_anchor=(1.0, 0.5)
+        )
+    else:
+        plt.legend().remove()
+
+    plt.tight_layout()
+
+
+def c_list(data, colors):
+    if isinstance(data, pd.Series):
+        return [colors[data.name]]
+
+    if isinstance(data, pd.DataFrame):
+        return [colors[k] for k in data.columns]
+
+
+def darken_color(color, amount=0.5):
+    import matplotlib.colors as mc
+    import colorsys
+    if isinstance(color, list):
+        return [darken_color(c) for c in color]
+    try:
+        c = mc.cnames[color]
+    except:
+        c = color
+    c = colorsys.rgb_to_hls(*mc.to_rgb(c))
+
+    return colorsys.hls_to_rgb(c[0], max(0, min(1, amount * c[1])), c[2])
 
 
 def draw_legend(ax, df):
