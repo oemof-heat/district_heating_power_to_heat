@@ -126,3 +126,12 @@ def draw_legend(ax, df):
         bbox_to_anchor=(1.0, 0.5)
     )
     plt.tight_layout()
+
+
+def remove_scenario_index_name(df):
+
+    index_names = list(df.index.names)
+
+    index_names[0] = None
+
+    df.index.names = index_names

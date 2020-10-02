@@ -7,7 +7,7 @@ import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from helper import get_experiment_dirs, get_scenario_assumptions, get_config_file
-from plot_helpers import plot_stacked_bar
+from plot_helpers import plot_stacked_bar, remove_scenario_index_name
 
 
 idx = pd.IndexSlice
@@ -67,6 +67,8 @@ def plot():
     select = group_varom_keep_marginal_cost(select)
 
     df = select / 300000  # Normalize to heat demand
+
+    remove_scenario_index_name(df)
 
     plot_stacked_bar(df, scenario_order, 'Costs/Revenues', 'Costs [Eur/MWhth]')
 

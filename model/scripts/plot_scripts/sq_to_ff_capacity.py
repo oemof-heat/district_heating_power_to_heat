@@ -7,7 +7,7 @@ import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from helper import get_experiment_dirs, get_scenario_assumptions, get_config_file
-from plot_helpers import plot_stacked_bar
+from plot_helpers import plot_stacked_bar, remove_scenario_index_name
 
 
 idx = pd.IndexSlice
@@ -56,6 +56,8 @@ def plot():
         index_col=[0,1,2,3,4,5]
     )
 
+    remove_scenario_index_name(all_scalars)
+
     fig, axs = plt.subplots(1, 3, figsize=(10, 5))
 
     slicing = idx[scenarios_1, :, :, :, :, ['capacity', 'invest']]
@@ -78,8 +80,8 @@ def plot():
 
     filename = os.path.join(dirs['plots'], 'capacities.pdf')
 
-
     plt.tight_layout()
+
     plt.savefig(filename)
 
     print(f"Saved plot to {filename}")
