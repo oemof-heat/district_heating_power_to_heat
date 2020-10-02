@@ -7,7 +7,8 @@ from pandas.testing import assert_frame_equal
 
 def get_config_file(name):
     abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    config_path = os.path.join(abspath, name)
+
+    config_path = os.path.join(abspath, 'config', name)
 
     with open(config_path) as c:
         config = yaml.safe_load(c)
