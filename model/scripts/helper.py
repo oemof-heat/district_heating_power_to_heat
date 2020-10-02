@@ -16,7 +16,7 @@ def get_config_file(name):
 
 
 def get_experiment_dirs(name=None):
-    config = get_config_file('config.yml')
+    config = get_config_file('directories.yml')
 
     abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
