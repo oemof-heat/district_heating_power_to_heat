@@ -21,6 +21,27 @@ COLORS_BY_LABEL = {LABELS[key]: value for key, value in COLOR_DICT.items()}
 rcParams['font.size'] = 16
 
 
+def group_varom_keep_marginal_cost(df_in):
+    df = df_in.copy()
+
+    marginal_cost = df.copy().loc[idx[:, :, :, :, :, 'marginal_cost'], :]
+
+    index_names = df.index.names
+
+    df.reset_index(inplace=True)
+
+    df.loc[:, 'var_name'] \
+        .replace({'carrier_cost': 'var_om', 'marginal_cost': 'var_om'}, inplace=True)
+
+    df.set_index(index_names, inplace=True)
+
+    df = pd.concat([df, marginal_cost], 0)
+
+    df = df.groupby(index_names).sum()
+
+    return df
+
+
 def plot():
 
     dirs = get_experiment_dirs('all_scenarios')
@@ -48,6 +69,10 @@ def plot():
         ],
     }
 
+
+    for s in scenarios:
+        s = [element + '-KWK' for element in s]
+
     all_scalars = pd.read_csv(
         os.path.join(dirs['postprocessed'], 'scalars.csv'),
         index_col=[0,1,2,3,4,5]
@@ -55,28 +80,7 @@ def plot():
 
     remove_scenario_index_name(all_scalars)
 
-    def group_varom_keep_marginal_cost(df_in):
-
-        df = df_in.copy()
-
-        marginal_cost = df.copy().loc[idx[:, :, :, :, :, 'marginal_cost'], :]
-
-        index_names = df.index.names
-
-        df.reset_index(inplace=True)
-
-        df.loc[:, 'var_name']\
-            .replace({'carrier_cost': 'var_om', 'marginal_cost': 'var_om'}, inplace=True)
-
-        df.set_index(index_names, inplace=True)
-
-        df = pd.concat([df, marginal_cost], 0)
-
-        df = df.groupby(index_names).sum()
-
-        return df
-
-    fig, axs = plt.subplots(1, 3, figsize=(10, 5))
+    fig, axs = plt.subplots(1, 3, figsize=(12, 5), sharey=True)
 
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
@@ -93,10 +97,6 @@ def plot():
     filename = os.path.join(dirs['plots'], 'costs.pdf')
 
     axs[0].set_ylabel('Cost of heat [Eur/MWh]')
-
-    axs[1].set_yticklabels([])
-
-    axs[2].set_yticklabels([])
 
     plt.tight_layout()
 

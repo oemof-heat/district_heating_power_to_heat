@@ -25,30 +25,30 @@ def plot():
 
     dirs = get_experiment_dirs('all_scenarios')
 
-    scenarios_1 = [
-        'SQ',
-        'SQ-HP-50',
-        'SQ-HP-50-COP-175',
-        'SQ-HP-50-COP-200',
-        'SQ-Std-200',
-    ]
+    scenarios = {
+        'Status quo': [
+            'SQ',
+            'SQ-HP-50',
+            'SQ-HP-50-COP-175',
+            'SQ-HP-50-COP-200',
+            'SQ-Std-200',
+         ],
+        'Transition to FF': [
+            'FF-50',
+            'FF-70',
+            'FF-80',
+            'FF-90',
+            'FF',
+        ],
+        'FF': [
+            'FF-COP-75',
+            'FF-Mean-150',
+            'FF-Std-150',
+            'FF-Mean-150-Std-150',
+        ],
+    }
 
-    scenarios_2 = [
-        'FF-50',
-        'FF-70',
-        'FF-80',
-        'FF-90',
-        'FF',
-    ]
-
-    scenarios_3 = [
-        'FF-COP-75',
-        'FF-Mean-150',
-        'FF-Std-150',
-        'FF-Mean-150-Std-150',
-    ]
-
-    for s in [scenarios_1, scenarios_2, scenarios_3]:
+    for s in scenarios:
         s = [element + '-KWK' for element in s]
 
     all_scalars = pd.read_csv(
@@ -58,25 +58,15 @@ def plot():
 
     remove_scenario_index_name(all_scalars)
 
-    fig, axs = plt.subplots(1, 3, figsize=(10, 5))
+    fig, axs = plt.subplots(1, 3, figsize=(12, 5), sharey=True)
 
-    slicing = idx[scenarios_1, :, :, :, :, ['capacity', 'invest']]
+    for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
-    select = all_scalars.loc[slicing, :]
+        slicing = idx[scenario_bunch, :, :, :, :, ['capacity', 'invest']]
 
-    plot_stacked_bar(select, scenarios_1, 'Status quo', 'Yearly energy [MWh]', ax=axs[0], legend=False)
+        select = all_scalars.loc[slicing, :]
 
-    slicing = idx[scenarios_2, :, :, :, :, ['capacity', 'invest']]
-
-    select = all_scalars.loc[slicing, :]
-
-    plot_stacked_bar(select, scenarios_2, 'Transition to FF', ax=axs[1], legend=False)
-
-    slicing = idx[scenarios_3, :, :, :, :, ['capacity', 'invest']]
-
-    select = all_scalars.loc[slicing, :]
-
-    plot_stacked_bar(select, scenarios_3, 'FF', ax=axs[2], legend=False)
+        plot_stacked_bar(select, scenario_bunch, title, 'Capacity [MW]', ax=axs[i], legend=False)
 
     filename = os.path.join(dirs['plots'], 'capacities.pdf')
 
