@@ -90,7 +90,7 @@ def plot():
 
         select = group_varom_keep_marginal_cost(select)
 
-        select = select /300000
+        select = select / 300000  #TODO: Find a better solution than this fix.
 
         plot_stacked_bar(select, scenario_bunch, title, ax=axs[i], legend=False)
 
