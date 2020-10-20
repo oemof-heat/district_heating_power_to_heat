@@ -21,10 +21,24 @@ COLORS_BY_LABEL = {LABELS[key]: value for key, value in COLOR_DICT.items()}
 rcParams['font.size'] = 16
 
 
-def group_varom_keep_marginal_cost(df_in):
-    df = df_in.copy()
+def group_varom_cost(df_in):
+    r"""
+    Takes a MultiIndex'ed DataFrame with index levels
+    ['scenario', 'name', 'type', 'carrier', 'tech', 'var_name']
+    and a column 'var_value' and returns a  MultiIndex'ed DataFrame
+    with the entries with carrier_cost and marginal_cost aggregated into
+    var_om.
 
-    marginal_cost = df.copy().loc[idx[:, :, :, :, :, 'marginal_cost'], :]
+    Parameters
+    ----------
+    df_in : pd.DataFrame
+
+    Returns
+    -------
+    df : pd.DataFrame
+    """
+    # Make a copies, one of which will remain, the other be grouped.
+    df = df_in.copy()
 
     index_names = df.index.names
 
@@ -34,8 +48,6 @@ def group_varom_keep_marginal_cost(df_in):
         .replace({'carrier_cost': 'var_om', 'marginal_cost': 'var_om'}, inplace=True)
 
     df.set_index(index_names, inplace=True)
-
-    df = pd.concat([df, marginal_cost], 0)
 
     df = df.groupby(index_names).sum()
 
@@ -78,8 +90,6 @@ def plot():
         index_col=[0,1,2,3,4,5]
     )
 
-    remove_scenario_index_name(all_scalars)
-
     fig, axs = plt.subplots(1, 3, figsize=(12, 5), sharey=True)
 
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
@@ -88,7 +98,9 @@ def plot():
 
         select = all_scalars.loc[slicing, :]
 
-        select = group_varom_keep_marginal_cost(select)
+        select = group_varom_cost(select)
+
+        remove_scenario_index_name(select)
 
         select = select / 300000  #TODO: Find a better solution than this fix.
 
