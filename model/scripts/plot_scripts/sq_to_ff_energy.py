@@ -48,8 +48,9 @@ def plot():
         ],
     }
 
-    for s in scenarios:
-        s = [element + '-KWK' for element in s]
+    for title, list in scenarios.items():
+
+        scenarios.update({title: [element + '-CHP' for element in list]})
 
     all_scalars = pd.read_csv(
         os.path.join(dirs['postprocessed'], 'scalars.csv'),
