@@ -25,23 +25,35 @@ def plot():
 
     dirs = get_experiment_dirs('all_scenarios')
 
-    scenario_order = [
-        'scenario_field_0',
-        'scenario_field_1',
-        'scenario_field_2',
-        'scenario_field_3',
-        'scenario_field_4',
-        'scenario_field_5',
-    ]
+    scenarios = {
+        'Status quo': [
+            'SQ',
+            'SQ-HP-50',
+            'SQ-HP-50-COP-175',
+            'SQ-HP-50-COP-200',
+            'SQ-Std-200',
+         ],
+        'Transition to FF': [
+            'FF-50',
+            'FF-70',
+            'FF-80',
+            'FF-90',
+            'FF',
+        ],
+        'FF': [
+            'FF-COP-75',
+            'FF-Mean-150',
+            'FF-Std-150',
+            'FF-Mean-150-Std-150',
+        ],
+    }
 
     all_scalars = pd.read_csv(
         os.path.join(dirs['postprocessed'], 'scalars.csv'),
         index_col=[0,1,2,3,4,5]
     )
 
-    slicing = idx[scenario_order, :, :, :, :, ['capacity_cost', 'carrier_cost', 'marginal_cost']]
-
-    select = all_scalars.copy().loc[slicing, :]
+    remove_scenario_index_name(all_scalars)
 
     def group_varom_keep_marginal_cost(df_in):
 
@@ -60,19 +72,33 @@ def plot():
 
         df = pd.concat([df, marginal_cost], 0)
 
-        df= df.groupby(index_names).sum()
+        df = df.groupby(index_names).sum()
 
         return df
 
-    select = group_varom_keep_marginal_cost(select)
+    fig, axs = plt.subplots(1, 3, figsize=(10, 5))
 
-    df = select / 300000  # Normalize to heat demand
+    for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
-    remove_scenario_index_name(df)
+        slicing = idx[scenario_bunch, :, :, :, :, ['capacity_cost', 'carrier_cost', 'marginal_cost']]
 
-    plot_stacked_bar(df, scenario_order, 'Costs/Revenues', 'Costs [Eur/MWhth]')
+        select = all_scalars.loc[slicing, :]
+
+        select = group_varom_keep_marginal_cost(select)
+
+        select = select /300000
+
+        plot_stacked_bar(select, scenario_bunch, title, ax=axs[i], legend=False)
 
     filename = os.path.join(dirs['plots'], 'costs.pdf')
+
+    axs[0].set_ylabel('Cost of heat [Eur/MWh]')
+
+    axs[1].set_yticklabels([])
+
+    axs[2].set_yticklabels([])
+
+    plt.tight_layout()
 
     plt.savefig(filename)
 
