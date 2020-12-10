@@ -116,7 +116,7 @@ def prepare_electricity_price_profiles(
     timeindex=TIMEINDEX
 ):
     def save(df, name):
-        df.to_csv(os.path.join(destination, name))
+        df.to_csv(os.path.join(destination, name), header=True)
 
     raw_price = pd.read_csv(raw_price, index_col=0)
 
@@ -145,7 +145,7 @@ def prepare_electricity_price_profiles(
 
 def prepare_heat_demand_profile(heat_demand_profile, destination, timeindex=TIMEINDEX):
     def save(df, name):
-        df.to_csv(os.path.join(destination, name))
+        df.to_csv(os.path.join(destination, name), header=True)
 
     heat_demand_profile = pd.read_csv(heat_demand_profile, index_col='timestamp')
     heat_demand_profile = heat_demand_profile.sum(axis=1)
