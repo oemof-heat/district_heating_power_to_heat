@@ -12,7 +12,10 @@ LABELS = get_config_file('labels.yml')
 COLORS_BY_LABEL = {LABELS[key]: value for key, value in COLOR_DICT.items()}
 
 
-def plot_stacked_bar(df_in, scenario_order, title=None, ylabel=None, ax=None, legend=True):
+def plot_stacked_bar(df_in, scenario_order, title=None,
+                     ylabel=None, ax=None, legend=True,
+                     colors=None):
+
     df = df_in.copy()
 
     df = df.loc[(abs(df['var_value']) > 1e-9)]
@@ -32,7 +35,8 @@ def plot_stacked_bar(df_in, scenario_order, title=None, ylabel=None, ax=None, le
 
     df = df.reindex(['CHP', 'HOB', 'TES cen.', 'HP', 'TES dec.'], level='name', axis=1)
 
-    colors = [COLORS_BY_LABEL[i] for i in df.columns.get_level_values('name')]
+    if colors is None:
+        colors = [COLORS_BY_LABEL[i] for i in df.columns.get_level_values('name')]
 
     if ax:
         pass
