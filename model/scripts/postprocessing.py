@@ -264,19 +264,23 @@ def multiply_param_with_variable(params, results, param_name, var_name):
 
 
 def index_tuple_to_pp_format(input_df, var_name):
-    input_df.name = 'var_value'
-    df = input_df.reset_index()
+
+    df = input_df.copy()
+
+    df.name = 'var_value'
+
+    df = df.reset_index()
 
     def is_bus(index):
         return index.map(lambda x: isinstance(x, Bus))
 
     df['name'] = np.nan
 
-    df['name'].loc[is_bus(input_df.index.get_level_values(0))] = df['level_1']
+    df.loc[is_bus(df['level_0']), 'name'] = df['level_1']
 
-    df['name'].loc[is_bus(input_df.index.get_level_values(1))] = df['level_0']
+    df.loc[is_bus(df['level_1']), 'name'] = df['level_0']
 
-    df['name'].loc[input_df.index.get_level_values(1).isna()] = df['level_0']
+    df.loc[df['level_1'].isna(), 'name'] = df['level_0']
 
     df['type'] = [
         getattr(t, "type", np.nan) for t in df['name']
