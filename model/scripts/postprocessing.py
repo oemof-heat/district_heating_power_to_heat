@@ -15,6 +15,27 @@ from oemof.tabular.tools.postprocessing import component_results, supply_results
 from helper import get_experiment_dirs, get_scenario_assumptions
 
 
+idx = pd.IndexSlice
+
+
+def multi_index_dtype_to_str(df):
+
+    df.index = df.index.map(
+        lambda row: tuple(str(level) for level in row)
+    )
+
+    return df
+
+
+def drop_rows_by_label(df, labels):
+
+    criterium = df.index.get_level_values(0).astype(str).isin(labels)
+
+    df = df.loc[~criterium]
+
+    return df
+
+
 def write_results(
     es, output_path, raw=False, summary=True, scalars=True, **kwargs
 ):
@@ -424,6 +445,35 @@ def get_flh(capacities, yearly_sum):
     return flh
 
 
+def get_share_el_heat(yearly_heat_in):
+    yearly_heat = yearly_heat_in.copy()
+
+    # Map all index labels to str.
+    multi_index_dtype_to_str(yearly_heat)
+
+    yearly_heat = drop_rows_by_label(
+        yearly_heat,
+        ['heat-demand', 'heat-distribution', 'heat-central-tes', 'heat-decentral-tes']
+    )
+
+    yearly_heat_el = yearly_heat.groupby('carrier').get_group('electricity').sum()
+
+    yearly_heat_el = yearly_heat_el['var_value']  # Select only numeric value before dividing.
+
+    yearly_heat_sum = yearly_heat['var_value'].sum()
+
+    share_el_heat = yearly_heat_el / yearly_heat_sum
+
+    share_el_heat = pd.DataFrame(
+        data=[['none', 'electricity', 'none', share_el_heat]],
+        columns=['type', 'carrier', 'tech', 'var_value']
+    )
+
+    share_el_heat.index = pd.MultiIndex.from_tuples([('aggregated', 'share_el_heat')])
+
+    return share_el_heat
+
+
 def write_total_cost(output_path):
 
     def add_index(x, name, value):
@@ -474,10 +524,16 @@ def main(**scenario_assumptions):
 
     # full_load_hours = get_flh(capacities, yearly_sum)
 
-    scalars = pd.concat(
-        [capacities, yearly_electricity, yearly_heat, capacity_cost, carrier_cost, marginal_cost], 0)
+    share_el_heat = get_share_el_heat(yearly_heat)
 
-    scalars = scalars.sort_values(by=['name', 'var_name'])
+    scalars = pd.concat(
+        [capacities, yearly_electricity, yearly_heat, capacity_cost, carrier_cost, marginal_cost,
+         share_el_heat], 0)
+
+    # some of the rows carry the component classes as index. This maps all index labels to str.
+    scalars = multi_index_dtype_to_str(scalars)
+
+    scalars.sort_values(by=['name', 'var_name', 'type', 'carrier', 'tech'], inplace=True)
 
     scalars.to_csv(os.path.join(dirs['postprocessed'], 'scalars.csv'))
 
