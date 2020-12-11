@@ -188,7 +188,10 @@ def get_capacities(es):
 
     capacities = pd.concat([endogenous, exogenous, storage])
 
-    capacities = capacities.groupby(level=[0, 1, 2, 3, 4]).sum()
+    capacities = capacities.groupby(level=["name", "type", "carrier", "tech", "var_name"]).sum()
+    capacities.reset_index(inplace=True)
+
+    capacities.set_index(["name", "var_name"], inplace=True)
 
     return capacities
 
@@ -196,7 +199,7 @@ def get_capacities(es):
 def cap_el_to_cap_th(df):
     df_adapted = df.copy()
 
-    df_adapted.loc['gas-chp', 'extraction', 'gas', 'chp', 'capacity'] *= 0.355/0.47
+    df_adapted.loc[('gas-chp', 'capacity'), 'var_value'] *= 0.355/0.47
 
     return df_adapted
 
@@ -288,7 +291,7 @@ def index_tuple_to_pp_format(input_df, var_name):
 
     df = df[['name', 'type', 'carrier', 'tech', 'var_name', 'var_value']]
 
-    df.set_index(['name', 'type', 'carrier', 'tech', 'var_name'], inplace=True)
+    df.set_index(['name', 'var_name'], inplace=True)
 
     return df
 
@@ -316,7 +319,7 @@ def get_yearly_sum(heat_sequences, var_name):
 
     yearly_sum = yearly_sum[['name', 'type', 'carrier', 'tech', 'var_name', 'var_value']]
 
-    yearly_sum.set_index(['name', 'type', 'carrier', 'tech', 'var_name'], inplace=True)
+    yearly_sum.set_index(['name', 'var_name'], inplace=True)
 
     return yearly_sum
 
@@ -327,7 +330,11 @@ def get_capacity_cost(es):
 
     capacity_cost = index_tuple_to_pp_format(capacity_cost, 'capacity_cost')
 
-    capacity_cost = capacity_cost.groupby(level=[0,1,2,3,4]).sum()
+    capacity_cost = capacity_cost.groupby(['name', 'type', 'carrier', 'tech', 'var_name']).sum()
+
+    capacity_cost.reset_index(inplace=True)
+
+    capacity_cost.set_index(['name', 'var_name'], inplace=True)
 
     return capacity_cost
 
@@ -465,9 +472,12 @@ def main(**scenario_assumptions):
 
     scalars = pd.concat(
         [capacities, yearly_electricity, yearly_heat, capacity_cost, carrier_cost, marginal_cost], 0)
+
+    scalars = scalars.sort_values(by=['name', 'var_name'])
+
     scalars.to_csv(os.path.join(dirs['postprocessed'], 'scalars.csv'))
 
 
 if __name__ == '__main__':
-    scenario_assumptions = get_scenario_assumptions().loc[0]
+    scenario_assumptions = get_scenario_assumptions().loc[8]
     main(**scenario_assumptions)
