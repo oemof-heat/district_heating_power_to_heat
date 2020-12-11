@@ -474,6 +474,30 @@ def get_share_el_heat(yearly_heat_in):
     return share_el_heat
 
 
+def get_spec_cost_of_heat(yearly_heat_in, capacity_cost, carrier_cost, marginal_cost):
+
+    yearly_heat = yearly_heat_in.copy()
+
+    yearly_heat = multi_index_dtype_to_str(yearly_heat)
+
+    heat_demand = yearly_heat.loc['heat-demand', 'var_value'].item()
+
+    summed_cost = carrier_cost['var_value'].sum()  \
+        + carrier_cost['var_value'].sum() \
+        + marginal_cost['var_value'].sum()
+
+    spec_cost_of_heat = summed_cost / heat_demand
+
+    spec_cost_of_heat = pd.DataFrame(
+        data=[['all', 'all', 'all', spec_cost_of_heat]],
+        columns=['type', 'carrier', 'tech', 'var_value'],
+    )
+
+    spec_cost_of_heat.index = pd.MultiIndex.from_tuples([('all', 'spec_cost_of_heat')])
+
+    return spec_cost_of_heat
+
+
 def write_total_cost(output_path):
 
     def add_index(x, name, value):
@@ -526,9 +550,11 @@ def main(**scenario_assumptions):
 
     share_el_heat = get_share_el_heat(yearly_heat)
 
+    spec_cost_of_heat = get_spec_cost_of_heat(yearly_heat, capacity_cost, carrier_cost, marginal_cost)
+
     scalars = pd.concat(
         [capacities, yearly_electricity, yearly_heat, capacity_cost, carrier_cost, marginal_cost,
-         share_el_heat], 0)
+         share_el_heat, spec_cost_of_heat], 0)
 
     # some of the rows carry the component classes as index. This maps all index labels to str.
     scalars = multi_index_dtype_to_str(scalars)
