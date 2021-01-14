@@ -44,11 +44,11 @@ def relative_values(assumptions):
     assumptions['overnight_cost_heat_pump'] = \
         assumptions['overnight_cost_heat_pump'].round(0).astype('int')
 
-    assumptions['overnight_cost_heat_pump'] *= \
-        100 / assumptions.loc['SQ', 'overnight_cost_heat_pump']
+    assumptions['cop_heat_pump'] *= \
+        100 / assumptions.loc['SQ', 'cop_heat_pump']
 
-    assumptions['overnight_cost_heat_pump'] = \
-        assumptions['overnight_cost_heat_pump'].round(0).astype('int')
+    assumptions['cop_heat_pump'] = \
+        assumptions['cop_heat_pump'].round(0).astype('int')
 
     return assumptions
 
