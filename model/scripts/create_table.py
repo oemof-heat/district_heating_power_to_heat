@@ -2,11 +2,11 @@ import os
 
 import pandas as pd
 
-from helper import get_experiment_dirs
+from helper import get_experiment_dirs, get_scenario_assumptions
 
 
 def main():
-    print("Creating table of scenario results")
+    print("Creating table of scenario assumptions and results")
 
     dirs = get_experiment_dirs('all_scenarios')
 
@@ -14,33 +14,36 @@ def main():
 
     all_scalars = pd.read_csv(input_file_path)
 
-    def filter_and_round(filter, decimals):
-        scenarios = [
-            'SQ',
-            'SQ-HP-50',
-            'SQ-HP-50-COP-175',
-            'SQ-HP-50-COP-200',
-            'SQ-Std-200',
-            'FF-50',
-            'FF-70',
-            'FF-80',
-            'FF-90',
-            'FF',
-            'FF-COP-75',
-            'FF-Mean-150',
-            'FF-Std-150',
-            'FF-Mean-150-Std-150',
-        ]
+    scenario_select = [
+        'SQ',
+        'SQ-HP-50',
+        'SQ-HP-50-COP-175',
+        'SQ-HP-50-COP-200',
+        'SQ-Std-200',
+        'FF-50',
+        'FF-70',
+        'FF-80',
+        'FF-90',
+        'FF',
+        'FF-COP-75',
+        'FF-Mean-150',
+        'FF-Std-150',
+        'FF-Mean-150-Std-150',
+    ]
 
-        df = all_scalars.loc[all_scalars['var_name'] == filter]
+    def filter_and_round(df, filter, decimals):
 
-        df = df[['scenario', 'var_value']].set_index('scenario')
+        _df = df.copy()
 
-        df = df.loc[scenarios, :]
+        _df = _df.loc[all_scalars['var_name'] == filter]
 
-        df = df.round(decimals)
+        _df = _df[['scenario', 'var_value']].set_index('scenario')
 
-        return df
+        _df = _df.loc[scenario_select, :]
+
+        _df = _df.round(decimals)
+
+        return _df
 
     def save_df(df, name):
 
@@ -48,11 +51,11 @@ def main():
 
         df.to_csv(output_file_path)
 
-    share_el_heat = filter_and_round('share_el_heat', 2)
+    share_el_heat = filter_and_round(all_scalars, 'share_el_heat', 2)
 
     share_el_heat *= 100  # decimals to percent
 
-    spec_cost_of_heat = filter_and_round('spec_cost_of_heat', 0)
+    spec_cost_of_heat = filter_and_round(all_scalars, 'spec_cost_of_heat', 0)
 
     results = pd.concat([share_el_heat, spec_cost_of_heat], 1)
 
@@ -62,4 +65,5 @@ def main():
 
 
 if __name__ == '__main__':
+    scenario_assumptions = get_scenario_assumptions()
     main()
