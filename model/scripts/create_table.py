@@ -93,9 +93,11 @@ def main(scenario_assumptions):
     assumptions = relative_values(assumptions)
 
     share_el_heat = \
-        filter_and_round(all_scalars, 'share_el_heat', scenario_select, decimals=2).astype('int')
+        filter_and_round(all_scalars, 'share_el_heat', scenario_select, decimals=2)
 
     share_el_heat *= 100  # decimals to percent
+
+    share_el_heat = share_el_heat.astype('int')
 
     spec_cost_of_heat = \
         filter_and_round(all_scalars, 'spec_cost_of_heat', scenario_select, decimals=0) \
