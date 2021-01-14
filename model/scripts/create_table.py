@@ -50,9 +50,13 @@ def main():
 
     share_el_heat = filter_and_round('share_el_heat', 2)
 
+    share_el_heat *= 100  # decimals to percent
+
     spec_cost_of_heat = filter_and_round('spec_cost_of_heat', 0)
 
     results = pd.concat([share_el_heat, spec_cost_of_heat], 1)
+
+    results = results.astype('int')
 
     save_df(results, name='results.csv')
 
