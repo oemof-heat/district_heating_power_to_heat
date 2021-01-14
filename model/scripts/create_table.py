@@ -5,7 +5,7 @@ import pandas as pd
 from helper import get_experiment_dirs, get_scenario_assumptions
 
 
-def main():
+def main(scenario_assumptions):
     print("Creating table of scenario assumptions and results")
 
     dirs = get_experiment_dirs('all_scenarios')
@@ -51,13 +51,29 @@ def main():
 
         df.to_csv(output_file_path)
 
+
+    assumptions = scenario_assumptions.loc[scenario_assumptions['scenario'].isin(scenario_select)]
+
+    assumptions = assumptions.set_index('scenario')
+
+    assumption_select = [
+        'charges_tax_levies_gas',
+        'charges_tax_levies_el',
+        'market_price_el',
+        'standard_dev_el',
+        'overnight_cost_heat_pump',
+        'cop_heat_pump',
+    ]
+
+    assumptions = assumptions[assumption_select]
+
     share_el_heat = filter_and_round(all_scalars, 'share_el_heat', 2)
 
     share_el_heat *= 100  # decimals to percent
 
     spec_cost_of_heat = filter_and_round(all_scalars, 'spec_cost_of_heat', 0)
 
-    results = pd.concat([share_el_heat, spec_cost_of_heat], 1)
+    results = pd.concat([assumptions, share_el_heat, spec_cost_of_heat], 1, sort=True)
 
     results = results.astype('int')
 
@@ -66,4 +82,4 @@ def main():
 
 if __name__ == '__main__':
     scenario_assumptions = get_scenario_assumptions()
-    main()
+    main(scenario_assumptions)
