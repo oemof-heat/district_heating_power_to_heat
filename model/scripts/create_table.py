@@ -14,21 +14,22 @@ def main():
 
     all_scalars = pd.read_csv(input_file_path)
 
-    def filter_and_round(filter):
+    def filter_and_round(filter, decimals):
         scenarios = [
             'SQ',
             'SQ-HP-50',
-            'SQ-HP-50-COP-150',
-            'SQ-Std-150',
+            'SQ-HP-50-COP-175',
+            'SQ-HP-50-COP-200',
             'SQ-Std-200',
-            'FF-20',
-            'FF-40',
-            'FF-60',
+            'FF-50',
+            'FF-70',
             'FF-80',
+            'FF-90',
             'FF',
             'FF-COP-75',
             'FF-Mean-150',
-            'FF-Std-200',
+            'FF-Std-150',
+            'FF-Mean-150-Std-150',
         ]
 
         df = all_scalars.loc[all_scalars['var_name'] == filter]
@@ -37,7 +38,7 @@ def main():
 
         df = df.loc[scenarios, :]
 
-        df = df.round(2)
+        df = df.round(decimals)
 
         return df
 
@@ -47,13 +48,13 @@ def main():
 
         df.to_csv(output_file_path)
 
-    share_el_heat = filter_and_round('share_el_heat')
+    share_el_heat = filter_and_round('share_el_heat', 2)
 
-    save_df(share_el_heat, name='share_el_heat.csv')
+    spec_cost_of_heat = filter_and_round('spec_cost_of_heat', 0)
 
-    spec_cost_of_heat = filter_and_round('spec_cost_of_heat')
+    results = pd.concat([share_el_heat, spec_cost_of_heat], 1)
 
-    save_df(spec_cost_of_heat, name='spec_cost_of_heat.csv')
+    save_df(results, name='results.csv')
 
 
 if __name__ == '__main__':
