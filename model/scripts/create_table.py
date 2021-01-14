@@ -103,6 +103,8 @@ def main(scenario_assumptions):
 
     results = pd.concat([assumptions, share_el_heat, spec_cost_of_heat], 1, sort=True)
 
+    results = results.loc[scenario_select, :]
+
     save_df(results, name='results.csv')
 
 
