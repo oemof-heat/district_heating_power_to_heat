@@ -90,7 +90,7 @@ def main(scenario_assumptions):
 
     assumptions = filter_assumptions(scenario_assumptions, scenario_select, assumption_select)
 
-    assumptions = relative_values(assumptions)
+    # assumptions = relative_values(assumptions)
 
     share_el_heat = \
         filter_and_round(all_scalars, 'share_el_heat', scenario_select, decimals=2)
