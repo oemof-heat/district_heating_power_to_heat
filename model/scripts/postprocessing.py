@@ -381,6 +381,11 @@ def get_marginal_cost(es):
 
     marginal_cost = index_tuple_to_pp_format(marginal_cost, 'marginal_cost')
 
+    # Workaround to get rid of variable costs appearing twice for chp
+    duplicated = marginal_cost.index.duplicated()
+
+    marginal_cost = marginal_cost.loc[~duplicated]
+
     return marginal_cost
 
 
