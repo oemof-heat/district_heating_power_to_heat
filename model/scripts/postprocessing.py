@@ -482,7 +482,7 @@ def get_spec_cost_of_heat(yearly_heat_in, capacity_cost, carrier_cost, marginal_
 
     heat_demand = yearly_heat.loc['heat-demand', 'var_value'].item()
 
-    summed_cost = carrier_cost['var_value'].sum()  \
+    summed_cost = capacity_cost['var_value'].sum()  \
         + carrier_cost['var_value'].sum() \
         + marginal_cost['var_value'].sum()
 
