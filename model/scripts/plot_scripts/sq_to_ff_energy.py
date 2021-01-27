@@ -28,6 +28,7 @@ def plot():
     scenarios = {
         'Status quo': [
             'SQ',
+            'SQ-CHP',
             'SQ-HP-50',
             'SQ-HP-50-COP-175',
             'SQ-HP-50-COP-200',
@@ -38,19 +39,15 @@ def plot():
             'FF-70',
             'FF-80',
             'FF-90',
-            'FF',
         ],
         'FF': [
+            'FF',
             'FF-COP-75',
             'FF-Mean-150',
             'FF-Std-150',
             'FF-Mean-150-Std-150',
         ],
     }
-
-    for title, list in scenarios.items():
-
-        scenarios.update({title: [element + '-CHP' for element in list]})
 
     all_scalars = pd.read_csv(
         os.path.join(dirs['postprocessed'], 'scalars.csv'),
