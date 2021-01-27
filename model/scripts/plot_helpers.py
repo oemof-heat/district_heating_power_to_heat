@@ -14,7 +14,7 @@ COLORS_BY_LABEL = {LABELS[key]: value for key, value in COLOR_DICT.items()}
 
 def plot_stacked_bar(df_in, scenario_order, title=None,
                      ylabel=None, ax=None, legend=True,
-                     colors=None):
+                     colors=None, yticks=None):
 
     df = df_in.copy()
 
@@ -50,6 +50,9 @@ def plot_stacked_bar(df_in, scenario_order, title=None,
     ax.set_title(title)
 
     ax.set_ylabel(ylabel)
+
+    if yticks is not None:
+        ax.set_yticks(yticks)
 
     ax.legend().remove()
 

@@ -3,6 +3,7 @@ import sys
 
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+import numpy as np
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -64,7 +65,17 @@ def plot():
 
         select = all_scalars.loc[slicing, :]
 
-        plot_stacked_bar(select, scenario_bunch, title, 'Yearly heat [MWh]', ax=axs[i], legend=False)
+        select *= 1e-3  # MWh to GWh
+
+        plot_stacked_bar(
+            select,
+            scenario_bunch,
+            title,
+            'Yearly heat in GWh',
+            ax=axs[i],
+            legend=False,
+            yticks=np.arange(0, 350, 50),
+        )
 
     plt.tight_layout()
 

@@ -3,6 +3,7 @@ import sys
 
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+import numpy as np
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -64,7 +65,15 @@ def plot():
 
         select = all_scalars.loc[slicing, :]
 
-        plot_stacked_bar(select, scenario_bunch, title, 'Capacity [MW]', ax=axs[i], legend=False)
+        plot_stacked_bar(
+            select,
+            scenario_bunch,
+            title,
+            'Capacity in MW',
+            ax=axs[i],
+            legend=False,
+            yticks=np.arange(0, 300, 50),
+        )
 
     filename = os.path.join(dirs['plots'], 'capacities.pdf')
 

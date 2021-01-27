@@ -3,6 +3,7 @@ import sys
 
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+import numpy as np
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
@@ -101,11 +102,18 @@ def plot():
 
         select = select / 300000  #TODO: Find a better solution than this fix.
 
-        plot_stacked_bar(select, scenario_bunch, title, ax=axs[i], legend=False)
+        plot_stacked_bar(
+            select,
+            scenario_bunch,
+            title,
+            ax=axs[i],
+            legend=False,
+            yticks=np.arange(-100, 120, 20),
+        )
 
     filename = os.path.join(dirs['plots'], 'costs.pdf')
 
-    axs[0].set_ylabel('Cost of heat [Eur/MWh]')
+    axs[0].set_ylabel('Cost of heat in Eur/MWh')
 
     plt.tight_layout()
 
