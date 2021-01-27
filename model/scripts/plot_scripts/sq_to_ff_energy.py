@@ -57,7 +57,7 @@ def plot():
 
     remove_scenario_index_name(all_scalars)
 
-    fig, axs = plt.subplots(1, 3, figsize=(12, 5), sharey=True)
+    fig, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 

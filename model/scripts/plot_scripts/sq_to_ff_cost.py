@@ -88,7 +88,7 @@ def plot():
         index_col=[0,1,2,3,4,5]
     )
 
-    fig, axs = plt.subplots(1, 3, figsize=(12, 5), sharey=True)
+    fig, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
