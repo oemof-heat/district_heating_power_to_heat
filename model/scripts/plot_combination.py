@@ -1,6 +1,6 @@
 import pkgutil
 
-from plot_scripts import dispatch, electricity_spot_price_timeseries, heat_demand_timeseries,\
+from plot_combination_scripts import dispatch, electricity_spot_price_timeseries, heat_demand_timeseries,\
     sq_to_ff_capacity, sq_to_ff_cost, sq_to_ff_energy
 
 
