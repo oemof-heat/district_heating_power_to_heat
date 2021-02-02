@@ -59,11 +59,16 @@ def plot():
 
     fig, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 
+    legend = False
+
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
         slicing = idx[scenario_bunch, :, :, :, :, ['capacity', 'invest']]
 
         select = all_scalars.loc[slicing, :]
+
+        if i == 2:
+            legend=True
 
         plot_stacked_bar(
             select,
@@ -71,7 +76,7 @@ def plot():
             title,
             'Capacity in MW',
             ax=axs[i],
-            legend=False,
+            legend=legend,
             yticks=np.arange(0, 300, 50),
         )
 

@@ -90,6 +90,8 @@ def plot():
 
     fig, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 
+    legend = False
+
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
         slicing = idx[scenario_bunch, :, :, :, :, ['capacity_cost', 'carrier_cost', 'marginal_cost']]
@@ -102,12 +104,15 @@ def plot():
 
         select = select / 300000  #TODO: Find a better solution than this fix.
 
+        if i == 2:
+            legend=True
+
         plot_stacked_bar(
             select,
             scenario_bunch,
             title,
             ax=axs[i],
-            legend=False,
+            legend=legend,
             yticks=np.arange(-100, 120, 20),
         )
 

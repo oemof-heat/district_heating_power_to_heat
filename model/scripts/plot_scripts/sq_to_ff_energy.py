@@ -8,7 +8,7 @@ import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from helper import get_experiment_dirs, get_scenario_assumptions, get_config_file
-from plot_helpers import plot_stacked_bar, remove_scenario_index_name
+from plot_helpers import plot_stacked_bar, remove_scenario_index_name, draw_legend
 
 
 idx = pd.IndexSlice
@@ -59,13 +59,18 @@ def plot():
 
     fig, axs = plt.subplots(1, 3, figsize=(12, 6), sharey=True)
 
+    legend = False
+
     for i, (title, scenario_bunch) in enumerate(scenarios.items()):
 
-        slicing = idx[scenario_bunch, :, :, :, :, 'yearly_heat']
+        slicing = idx[scenario_bunch, :, :, :, ['chp', 'hob', 'hp'], 'yearly_heat']
 
         select = all_scalars.loc[slicing, :]
 
         select *= 1e-3  # MWh to GWh
+
+        if i == 2:
+            legend=True
 
         plot_stacked_bar(
             select,
@@ -73,7 +78,7 @@ def plot():
             title,
             'Yearly heat in GWh',
             ax=axs[i],
-            legend=False,
+            legend=legend,
             yticks=np.arange(0, 350, 50),
         )
 
