@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from helper import get_experiment_dirs, get_scenario_assumptions, get_config_file
-from plot_helpers import plot_stacked_bar, remove_scenario_index_name
+from tools.helper import get_experiment_dirs, get_scenario_assumptions, get_config_file
+from tools.plot_helpers import plot_stacked_bar, remove_scenario_index_name
 
 
 idx = pd.IndexSlice

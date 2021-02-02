@@ -1,6 +1,6 @@
 import os
 
-from helper import get_experiment_dirs, check_if_csv_dirs_equal
+from tools.helper import get_experiment_dirs, check_if_csv_dirs_equal
 
 
 dirs = get_experiment_dirs()

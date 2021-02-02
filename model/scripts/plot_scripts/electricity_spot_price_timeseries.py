@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from helper import get_experiment_dirs
-from plot_helpers import plot_load_duration
+from tools.helper import get_experiment_dirs
+from tools.plot_helpers import plot_load_duration
 
 
 def plot():

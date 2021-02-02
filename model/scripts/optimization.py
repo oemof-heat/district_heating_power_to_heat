@@ -9,7 +9,7 @@ from oemof import outputlib
 from oemof.tabular import datapackage  # noqa
 from oemof.tabular.facades import TYPEMAP
 
-from helper import get_experiment_dirs, get_scenario_assumptions
+from tools.helper import get_experiment_dirs, get_scenario_assumptions
 
 
 def optimize(input_data_dir, results_data_dir, solver='cbc', debug=False):

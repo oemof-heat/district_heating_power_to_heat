@@ -6,7 +6,7 @@ from pandas.testing import assert_frame_equal
 
 
 def get_config_file(name):
-    abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
     config_path = os.path.join(abspath, 'config', name)
 
@@ -19,7 +19,7 @@ def get_config_file(name):
 def get_experiment_dirs(name=None):
     config = get_config_file('directories.yml')
 
-    abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    abspath = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 
     if name:
         dirs = {}

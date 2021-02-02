@@ -1,4 +1,4 @@
-import helper
+import tools.helper
 import preprocessing
 import optimization
 import postprocessing
@@ -8,7 +8,7 @@ import plot_combination
 
 
 if __name__ == '__main__':
-    scenario_assumptions = helper.get_scenario_assumptions()
+    scenario_assumptions = tools.helper.get_scenario_assumptions()
 
     selected_id = scenario_assumptions.index
 

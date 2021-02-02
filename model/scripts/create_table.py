@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from helper import get_experiment_dirs, get_scenario_assumptions
+from tools.helper import get_experiment_dirs, get_scenario_assumptions
 
 
 dirs =get_experiment_dirs('all_scenarios')

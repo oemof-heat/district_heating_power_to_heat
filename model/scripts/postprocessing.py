@@ -12,7 +12,7 @@ from oemof.tabular import facades
 from oemof.tabular.tools.postprocessing import component_results, supply_results,\
     demand_results, bus_results
 
-from helper import get_experiment_dirs, get_scenario_assumptions
+from tools.helper import get_experiment_dirs, get_scenario_assumptions
 
 
 idx = pd.IndexSlice

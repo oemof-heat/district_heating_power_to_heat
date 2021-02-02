@@ -9,7 +9,7 @@ from oemof.tools.logger import define_logging
 from oemof.tabular.datapackage import building
 from oemof.tools.economics import annuity
 
-from helper import get_experiment_dirs, get_scenario_assumptions
+from tools.helper import get_experiment_dirs, get_scenario_assumptions
 
 
 TIMEINDEX = pd.date_range('1/1/2017', periods=8760, freq='H')
