@@ -3,6 +3,8 @@ import preprocessing
 import optimization
 import postprocessing
 import plotting
+import combination
+import plot_combination
 
 
 if __name__ == '__main__':
@@ -20,3 +22,8 @@ if __name__ == '__main__':
         postprocessing.main(**scenario_assumptions.loc[i])
 
         plotting.main(**scenario_assumptions.loc[i])
+
+
+combination.main(**scenario_assumptions)
+
+plot_combination.main()
