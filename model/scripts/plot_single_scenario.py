@@ -6,6 +6,7 @@ import matplotlib.dates as mdates
 from matplotlib import rcParams
 
 from helper import get_experiment_dirs, get_scenario_assumptions, get_config_file
+from plot_helpers import map_handles_labels, map_names_to_labels
 
 
 idx = pd.IndexSlice
@@ -25,24 +26,6 @@ def c_list(data, colors):
 
     if isinstance(data, pd.DataFrame):
         return [colors[k] for k in data.columns]
-
-
-def map_names_to_labels(component_list):
-    return [LABELS[c] for c in component_list]
-
-
-def map_handles_labels(handles=None, labels=None):
-    if labels is None:
-        current_axis = plt.gca()
-        handles, labels = current_axis.get_legend_handles_labels()
-
-    labels = map_names_to_labels(labels)
-
-    l_h = {l: h for l, h in zip(labels, handles)}
-
-    l_h = {l: l_h[l] for l in sorted(l_h.keys())}
-
-    return l_h.values(), l_h.keys()
 
 
 def darken_color(color, amount=0.5):

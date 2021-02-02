@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from helper import get_config_file
-from plotting import map_handles_labels, map_names_to_labels
 
 
 COLOR_DICT = get_config_file('colors.yml')
@@ -10,6 +9,24 @@ COLOR_DICT = get_config_file('colors.yml')
 LABELS = get_config_file('labels.yml')
 
 COLORS_BY_LABEL = {LABELS[key]: value for key, value in COLOR_DICT.items()}
+
+
+def map_names_to_labels(component_list):
+    return [LABELS[c] for c in component_list]
+
+
+def map_handles_labels(handles=None, labels=None):
+    if labels is None:
+        current_axis = plt.gca()
+        handles, labels = current_axis.get_legend_handles_labels()
+
+    labels = map_names_to_labels(labels)
+
+    l_h = {l: h for l, h in zip(labels, handles)}
+
+    l_h = {l: l_h[l] for l in sorted(l_h.keys())}
+
+    return l_h.values(), l_h.keys()
 
 
 def plot_stacked_bar(df_in, scenario_order, title=None,

@@ -2,7 +2,7 @@ import helper
 import preprocessing
 import optimization
 import postprocessing
-import plotting
+import plot_single_scenario
 import combination
 import plot_combination
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
         postprocessing.main(**scenario_assumptions.loc[i])
 
-        plotting.main(**scenario_assumptions.loc[i])
+        plot_single_scenario.main(**scenario_assumptions.loc[i])
 
 
 combination.main(**scenario_assumptions)
