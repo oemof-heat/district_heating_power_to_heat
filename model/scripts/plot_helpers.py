@@ -126,9 +126,17 @@ def darken_color(color, amount=0.5):
 def draw_legend(ax, df):
     handles, labels = plt.gca().get_legend_handles_labels()
 
+    labels = list(df.columns.get_level_values('name'))
+
+    d = {l: h for h, l in zip(handles, labels)}
+
+    labels = d.keys()
+
+    handles = d.values()
+
     ax.legend(
         handles=handles,
-        labels=list(df.columns.get_level_values('name')),
+        labels=labels,
         loc='center left',
         bbox_to_anchor=(1.0, 0.5)
     )
