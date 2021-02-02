@@ -116,6 +116,8 @@ def plot():
             yticks=np.arange(-100, 120, 20),
         )
 
+        axs[i].set_ylim(-90, 100)
+
     filename = os.path.join(dirs['plots'], 'costs.pdf')
 
     axs[0].set_ylabel('Cost of heat in Eur/MWh')
