@@ -3,7 +3,7 @@ import preprocessing
 import optimization
 import postprocessing
 import plot_single_scenario
-import combination
+import join_scenarios
 import plot_combination
 
 
@@ -24,6 +24,6 @@ if __name__ == '__main__':
         plot_single_scenario.main(**scenario_assumptions.loc[i])
 
 
-combination.main(**scenario_assumptions)
+join_scenarios.main(**scenario_assumptions)
 
 plot_combination.main()
