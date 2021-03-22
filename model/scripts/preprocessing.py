@@ -207,6 +207,10 @@ def main(**scenario_assumptions):
         os.path.join(dirs['preprocessed'])
     )
 
+    sequences_dir = os.path.join(dirs['preprocessed'], 'data', 'sequences')
+    if not os.path.exists(sequences_dir):
+        os.makedirs(sequences_dir)
+
     gas_price = scenario_assumptions['market_price_gas']\
                 + scenario_assumptions['charges_tax_levies_gas']
 
