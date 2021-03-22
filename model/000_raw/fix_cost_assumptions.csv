@@ -1,8 +1,0 @@
-component,overnight_cost,unit,lifetime,fixom,efficiency,reference,,,
-CHP,1300,\SI{}{\text{\euro}\per\kilo\watt},25,2.3,,\citep{Hilpert2018},,,
-HOB,60,\SI{}{\text{\euro}\per\kilo\watt},25,3.3,1,\citep{Henning2014b,DanishEnergyAgency2018},,
-HP,700,\SI{}{\text{\euro}\per\kilo\watt},25,1,2,\citep{DanishEnergyAgency2018,Gerhardt2015a,Brown2018,Pieper2018}
-PtH res. central,0,\SI{}{\text{\euro}\per\kilo\watt},20,1.6,1,\citep{DanishEnergyAgency2018},,,
-PtH res. decentral,150,\SI{}{\text{\euro}\per\kilo\watt},20,0.7,1,\citep{DanishEnergyAgency2018},,,
-TES central,2.864,\SI{}{\text{\euro}\per\kilo\watt},40,0.3,,\citep{DanishEnergyAgency2018,Christidis2019},,
-TES decentral,14.32,\SI{}{\text{\euro}\per\kilo\watt},40,0.3,,\citep{DanishEnergyAgency2018,Christidis2019},,
